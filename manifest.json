@@ -15,12 +15,14 @@
       "src": "/mipwa/icon-512.png",
       "sizes": "512x512",
       "type": "image/png"
-    },
+    }
+  ],
+  "screenshots": [
     {
-      "src": "/mipwa/icon-192.png",
-      "sizes": "192x192",
+      "src": "/mipwa/screenshot1.png",
+      "sizes": "720x1280",
       "type": "image/png",
-      "purpose": "maskable"
+      "form_factor": "narrow"
     }
   ]
 }
