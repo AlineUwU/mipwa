@@ -1,18 +1,29 @@
 const CACHE_NAME = 'recetas-cache-v1';
+
 const urlsToCache = [
-  '/',
-  '/index.html',
-  '/styles.css'
+  '/mipwa/',
+  '/mipwa/index.html',
+  '/mipwa/styles.css',
+  '/mipwa/manifest.json',
+  '/mipwa/icon-192.png',
+  '/mipwa/icon-512.png'
 ];
 
+// Instalar y guardar archivos en caché
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => {
+      return cache.addAll(urlsToCache);
+    })
   );
+  self.skipWaiting(); // Activa inmediatamente sin esperar
 });
 
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => response || fetch(event.request))
-  );
-});
+// Activar y limpiar caches antiguos
+self.addEventListener('activate', event => {
+  const whitelist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.map(key => {
+          if (!whitelist.includes(key
