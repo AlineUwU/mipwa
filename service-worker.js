@@ -9,6 +9,7 @@ const urlsToCache = [
   '/mipwa/icon-512.png'
 ];
 
+// Instalar y guardar en caché
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -18,6 +19,7 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
+// Activar y limpiar cachés viejas
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(keys =>
@@ -33,13 +35,21 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
+// Interceptar las peticiones
 self.addEventListener('fetch', event => {
+  const requestURL = new URL(event.request.url);
+
+  // Si es la raíz, devuelve index.html
+  if (requestURL.pathname === '/mipwa/') {
+    event.respondWith(
+      caches.match('/mipwa/index.html')
+    );
+    return;
+  }
+
+  // Para el resto de recursos
   event.respondWith(
     caches.match(event.request, { ignoreSearch: true })
       .then(response => response || fetch(event.request))
       .catch(err => {
-        console.error('❌ Error en fetch', err);
-        return fetch(event.request);
-      })
-  );
-});
+        console.error('❌ Error en fetch',
