@@ -2,7 +2,7 @@
   "name": "Calculadora de Costos de Recetas",
   "short_name": "Costos Recetas",
   "description": "Calcula costos, márgenes y precios de venta de recetas de manera profesional",
-  "start_url": "./index.html",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#5D5CDE",
