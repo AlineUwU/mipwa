@@ -1,0 +1,90 @@
+/* Base accesible */
+body {
+  background-color: #f5f5f5;
+  color: #222;
+  font-size: 18px;
+  line-height: 1.6;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  font-size: 28px;
+  color: #0077cc;
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 5px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+button {
+  display: block;
+  margin-top: 25px;
+  background-color: #0077cc;
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  font-size: 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:hover {
+  background-color: #005fa3;
+}
+
+.resultado {
+  margin-top: 25px;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+/* Dark mode compatible */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1e1e1e;
+    color: #e6e6e6;
+  }
+
+  .container {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 10px rgba(255,255,255,0.05);
+  }
+
+  input {
+    background-color: #3a3a3a;
+    color: #f0f0f0;
+    border-color: #555;
+  }
+
+  button {
+    background-color: #3399ff;
+  }
+
+  button:hover {
+    background-color: #1a75d2;
+  }
+}
