@@ -1,21 +1,11 @@
-<!DOCTYPE html><html lang="es"><head><meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: blob: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://code.jquery.com https://unpkg.com https://d3js.org https://threejs.org https://cdn.plot.ly https://stackpath.bootstrapcdn.com https://maps.googleapis.com https://cdn.tailwindcss.com https://ajax.googleapis.com https://kit.fontawesome.com https://cdn.datatables.net https://maxcdn.bootstrapcdn.com https://code.highcharts.com https://tako-static-assets-production.s3.amazonaws.com https://www.youtube.com https://fonts.googleapis.com https://fonts.gstatic.com https://pfst.cf2.poecdn.net https://puc.poecdn.net https://i.imgur.com https://wikimedia.org https://*.icons8.com https://*.giphy.com https://picsum.photos https://images.unsplash.com; frame-src 'self' https://www.youtube.com https://trytako.com; child-src 'self'; manifest-src 'self'; worker-src 'self'; upgrade-insecure-requests; block-all-mixed-content;">
+<!DOCTYPE html>
+<html lang="es">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora de Costos de Recetas</title>
-    
-    <!-- PWA Meta Tags -->
-    <meta name="description" content="Calcula costos, márgenes y precios de venta de recetas de manera profesional">
-    <meta name="theme-color" content="#5D5CDE">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Costos Recetas">
-    <meta name="msapplication-TileColor" content="#5D5CDE">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/mipwa/manifest.json">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -49,10 +39,11 @@
 
         <div class="grid lg:grid-cols-3 gap-8">
             <!-- Ingredientes Section -->
-            <div class="lg:col-span-2">
+            <div class="lg:col-span-2 space-y-6">
+                <!-- Ingredientes Regulares -->
                 <div class="bg-gray-50 dark:bg-gray-800 rounded-xl p-6">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-semibold">Ingredientes</h2>
+                        <h2 class="text-xl font-semibold">Ingredientes Regulares</h2>
                         <button id="addIngredientBtn" class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
                             + Agregar Ingrediente
                         </button>
@@ -94,6 +85,45 @@
                             <input type="number" class="col-span-2 px-3 py-2 border rounded-lg text-base bg-white dark:bg-gray-700 dark:border-gray-600" placeholder="$0.00" value="50" min="0" step="0.01">
                             <span class="col-span-1 text-sm font-medium text-gray-700 dark:text-gray-300 cost-display">$50.00</span>
                             <button class="col-span-1 text-red-500 hover:text-red-700 remove-ingredient p-1">✕</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ingredientes Especiales -->
+                <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-xl p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-xl font-semibold text-orange-800 dark:text-orange-200">Ingredientes Especiales</h2>
+                            <p class="text-sm text-orange-600 dark:text-orange-300">Para ingredientes a granel (ej: $80 por 250g, usas 7g)</p>
+                        </div>
+                        <button id="addSpecialIngredientBtn" class="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors">
+                            + Agregar Especial
+                        </button>
+                    </div>
+
+                    <!-- Ingredientes Especiales Header -->
+                    <div class="grid grid-cols-16 gap-2 mb-4 text-sm font-medium text-orange-700 dark:text-orange-300 border-b border-orange-200 dark:border-orange-700 pb-2">
+                        <div class="col-span-4">Ingrediente</div>
+                        <div class="col-span-2">Precio Paquete</div>
+                        <div class="col-span-2">Contenido Paq.</div>
+                        <div class="col-span-2">Cantidad Usada</div>
+                        <div class="col-span-2">Masa (ml/g)</div>
+                        <div class="col-span-2">Costo Proporcional</div>
+                        <div class="col-span-1">Costo Total</div>
+                        <div class="col-span-1"></div>
+                    </div>
+
+                    <!-- Ingredientes Especiales List -->
+                    <div id="specialIngredientsList" class="space-y-2">
+                        <!-- Ejemplo inicial: Grenetina -->
+                        <div class="special-ingredient-row grid grid-cols-16 gap-2 items-center py-2 rounded-lg">
+                            <input type="text" class="col-span-4 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="Nombre del ingrediente" value="Grenetina">
+                            <input type="number" class="col-span-2 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="$0.00" value="80" min="0" step="0.01">
+                            <input type="number" class="col-span-2 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="250g" value="250" min="0" step="0.1">
+                            <input type="number" class="col-span-2 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="ml/g" value="7" min="0" step="0.1">
+                            <span class="col-span-2 text-sm font-medium text-orange-700 dark:text-orange-300 proportional-cost">$2.24</span>
+                            <span class="col-span-1 text-sm font-medium text-gray-700 dark:text-gray-300 special-cost-display">$2.24</span>
+                            <button class="col-span-1 text-red-500 hover:text-red-700 remove-special-ingredient p-1">✕</button>
                         </div>
                     </div>
                 </div>
@@ -186,12 +216,15 @@
         // DOM elements
         const ingredientsList = document.getElementById('ingredientsList');
         const addIngredientBtn = document.getElementById('addIngredientBtn');
+        const specialIngredientsList = document.getElementById('specialIngredientsList');
+        const addSpecialIngredientBtn = document.getElementById('addSpecialIngredientBtn');
         const unitsYield = document.getElementById('unitsYield');
         const addedPercentage = document.getElementById('addedPercentage');
         const profitPercentage = document.getElementById('profitPercentage');
 
         // Add event listeners
         addIngredientBtn.addEventListener('click', addIngredient);
+        addSpecialIngredientBtn.addEventListener('click', addSpecialIngredient);
         unitsYield.addEventListener('input', calculateAll);
         addedPercentage.addEventListener('input', calculateAll);
         profitPercentage.addEventListener('input', calculateAll);
@@ -202,7 +235,6 @@
             ingredientRow.className = 'ingredient-row grid grid-cols-12 gap-2 items-center py-2 rounded-lg';
             ingredientRow.innerHTML = `
                 <input type="text" class="col-span-4 px-3 py-2 border rounded-lg text-base bg-white dark:bg-gray-700 dark:border-gray-600" placeholder="Nombre del ingrediente">
-                <input type="number" class="col-span-2 px-3 py-2 border rounded-lg text-base bg-white dark:bg-gray-700 dark:border-gray-600" placeholder="Cant." value="1" min="0" step="0.1">
                 <input type="number" class="col-span-2 px-3 py-2 border rounded-lg text-base bg-white dark:bg-gray-700 dark:border-gray-600" placeholder="ml/g" value="0" min="0" step="0.1">
                 <input type="number" class="col-span-2 px-3 py-2 border rounded-lg text-base bg-white dark:bg-gray-700 dark:border-gray-600" placeholder="$0.00" value="0" min="0" step="0.01">
                 <span class="col-span-1 text-sm font-medium text-gray-700 dark:text-gray-300 cost-display">$0.00</span>
@@ -222,12 +254,40 @@
             });
         }
 
+        function addSpecialIngredient() {
+            const specialRow = document.createElement('div');
+            specialRow.className = 'special-ingredient-row grid grid-cols-16 gap-2 items-center py-2 rounded-lg';
+            specialRow.innerHTML = `
+                <input type="text" class="col-span-4 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="Nombre del ingrediente">
+                <input type="number" class="col-span-2 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="$0.00" value="0" min="0" step="0.01">
+                <input type="number" class="col-span-2 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="250g" value="1" min="0" step="0.1">
+                <input type="number" class="col-span-2 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="7g" value="1" min="0" step="0.1">
+                <input type="number" class="col-span-2 px-3 py-2 border border-orange-300 dark:border-orange-600 rounded-lg text-base bg-white dark:bg-gray-700" placeholder="ml/g" value="1" min="0" step="0.1">
+                <span class="col-span-2 text-sm font-medium text-orange-700 dark:text-orange-300 proportional-cost">$0.00</span>
+                <span class="col-span-1 text-sm font-medium text-gray-700 dark:text-gray-300 special-cost-display">$0.00</span>
+                <button class="col-span-1 text-red-500 hover:text-red-700 remove-special-ingredient p-1">✕</button>
+            `;
+            specialIngredientsList.appendChild(specialRow);
+            
+            // Add event listeners to new inputs
+            const inputs = specialRow.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => input.addEventListener('input', calculateAll));
+            
+            // Add remove functionality
+            const removeBtn = specialRow.querySelector('.remove-special-ingredient');
+            removeBtn.addEventListener('click', () => {
+                specialRow.remove();
+                calculateAll();
+            });
+        }
+
         function calculateAll() {
             const rows = document.querySelectorAll('.ingredient-row');
+            const specialRows = document.querySelectorAll('.special-ingredient-row');
             let totalIngredientsCost = 0;
             let totalMass = 0;
 
-            // Calculate individual ingredient costs and totals
+            // Calculate regular ingredient costs and totals
             rows.forEach(row => {
                 const quantity = parseFloat(row.children[1].value) || 0;
                 const mass = parseFloat(row.children[2].value) || 0;
@@ -237,6 +297,24 @@
                 row.querySelector('.cost-display').textContent = `$${cost.toFixed(2)}`;
                 totalIngredientsCost += cost;
                 totalMass += mass * quantity;
+            });
+
+            // Calculate special ingredient costs and totals
+            specialRows.forEach(row => {
+                const packagePrice = parseFloat(row.children[1].value) || 0;
+                const packageContent = parseFloat(row.children[2].value) || 1;
+                const usedQuantity = parseFloat(row.children[3].value) || 0;
+                const mass = parseFloat(row.children[4].value) || 0;
+                
+                // Calculate proportional cost: (package_price * used_quantity) / package_content
+                const proportionalCost = (packagePrice * usedQuantity) / packageContent;
+                const totalCost = proportionalCost; // Para ingredientes especiales, el costo proporcional ES el costo total
+                
+                row.querySelector('.proportional-cost').textContent = `$${proportionalCost.toFixed(2)}`;
+                row.querySelector('.special-cost-display').textContent = `$${totalCost.toFixed(2)}`;
+                
+                totalIngredientsCost += totalCost;
+                totalMass += mass;
             });
 
             // Get configuration values
@@ -266,10 +344,21 @@
             const existingInputs = document.querySelectorAll('.ingredient-row input[type="number"]');
             existingInputs.forEach(input => input.addEventListener('input', calculateAll));
 
+            const existingSpecialInputs = document.querySelectorAll('.special-ingredient-row input[type="number"]');
+            existingSpecialInputs.forEach(input => input.addEventListener('input', calculateAll));
+
             const removeButtons = document.querySelectorAll('.remove-ingredient');
             removeButtons.forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.target.closest('.ingredient-row').remove();
+                    calculateAll();
+                });
+            });
+
+            const removeSpecialButtons = document.querySelectorAll('.remove-special-ingredient');
+            removeSpecialButtons.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.special-ingredient-row').remove();
                     calculateAll();
                 });
             });
@@ -318,7 +407,7 @@
             yPosition += 8;
             pdf.setFont("helvetica", "normal");
             
-            // Get ingredients data
+            // Get regular ingredients data
             const rows = document.querySelectorAll('.ingredient-row');
             rows.forEach(row => {
                 const name = row.children[0].value || 'Sin nombre';
@@ -340,6 +429,50 @@
                 pdf.text(totalCost, 170, yPosition);
                 yPosition += 8;
             });
+
+            // Special ingredients section
+            const specialRows = document.querySelectorAll('.special-ingredient-row');
+            if (specialRows.length > 0) {
+                yPosition += 10;
+                pdf.setFont("helvetica", "bold");
+                pdf.setFontSize(14);
+                pdf.text('INGREDIENTES ESPECIALES', 20, yPosition);
+                
+                yPosition += 10;
+                pdf.setFontSize(10);
+                pdf.text('Ingrediente', 20, yPosition);
+                pdf.text('Precio Paq.', 80, yPosition);
+                pdf.text('Contenido', 110, yPosition);
+                pdf.text('Usado', 140, yPosition);
+                pdf.text('Costo Total', 170, yPosition);
+                
+                // Draw line under headers
+                pdf.line(20, yPosition + 2, 190, yPosition + 2);
+                
+                yPosition += 8;
+                pdf.setFont("helvetica", "normal");
+                
+                specialRows.forEach(row => {
+                    const name = row.children[0].value || 'Sin nombre';
+                    const packagePrice = row.children[1].value || '0';
+                    const packageContent = row.children[2].value || '0';
+                    const usedQuantity = row.children[3].value || '0';
+                    const totalCost = row.querySelector('.special-cost-display').textContent;
+                    
+                    // Check if we need a new page
+                    if (yPosition > 270) {
+                        pdf.addPage();
+                        yPosition = 25;
+                    }
+                    
+                    pdf.text(name.substring(0, 25), 20, yPosition);
+                    pdf.text(`$${packagePrice}`, 80, yPosition);
+                    pdf.text(packageContent, 110, yPosition);
+                    pdf.text(usedQuantity, 140, yPosition);
+                    pdf.text(totalCost, 170, yPosition);
+                    yPosition += 8;
+                });
+            }
             
             // Configuration section
             yPosition += 10;
@@ -417,20 +550,5 @@
             pdf.save(`costos-receta-${currentDate}.pdf`);
         }
     </script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/mipwa/service-worker.js')
-      .then(() => console.log('✔ Service Worker registrado'))
-      .catch(err => console.error('❌ Error registrando SW', err));
-  }
-</script>
- <footer class="text-center mt-16 text-sm text-gray-500 dark:text-gray-400">
-    <hr class="my-6 border-gray-300 dark:border-gray-700">
-    <p>Esta app es gratuita, sin anuncios y hecha con amor para quien la necesite.</p>
-    <p class="mt-1">— Aline RC ✨</p>
-</footer>
-
-
-</body></html>
-<link rel="stylesheet" href="styles.css">
+</body>
+</html>
